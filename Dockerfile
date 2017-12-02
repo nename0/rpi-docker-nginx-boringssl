@@ -34,12 +34,12 @@ ENV	CONFIG="\
 		--add-dynamic-module=/usr/src/ngx_headers_more \
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	"
-
-RUN ["sh", "-c", "which sh"]
-RUN ["sh", "-c", "which bash"]
+RUN ["/bin/ash", "-c", "which sh"]
+RUN ["/bin/ash", "-c", "which ash"]
+RUN ["/bin/sh", "-c", "which ash"]
 RUN ["/bin/sh", "-c", "ls -l /bin"]
-RUN ["/bin/bash", "-c", "ls -l /bin"]
-RUN ["/bin/bash", "-c", "ln -snf /bin/sh /bin/bash"]
+#RUN ["/bin/bash", "-c", "ls -l /bin"]
+#RUN ["/bin/bash", "-c", "ln -snf /bin/sh /bin/bash"]
 RUN groupadd nginx
 RUN useradd -d /var/cache/nginx --shell /sbin/nologin -g nginx nginx
 RUN apk add --no-cache --virtual .build-deps \
