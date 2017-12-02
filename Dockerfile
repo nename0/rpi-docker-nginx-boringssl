@@ -35,8 +35,6 @@ ENV	CONFIG="\
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	"
 
-RUN ["/usr/local/bin/bash", "-c", "which sh"]
-RUN ["/usr/local/bin/bash", "-c", "which bash"]
 RUN ["/usr/bin/env", "bash", "-c", "which sh"]
 RUN ["/usr/bin/env", "bash", "-c", "which bash"]
 RUN ["/bin/bash", "-c", "which sh"]
