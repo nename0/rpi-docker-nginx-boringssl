@@ -1,7 +1,7 @@
 #SOURCE https://github.com/nginx-modules/docker-nginx-boringss
 
 # Pull base image
-FROM arm32v6/alpine:latest
+FROM arm32v6/alpine:3.6
 
 ENV NGINX_VERSION 1.13.6
 
