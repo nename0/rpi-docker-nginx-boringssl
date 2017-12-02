@@ -5,8 +5,8 @@ FROM resin/rpi-raspbian:stretch
 
 ENV NGINX_VERSION 1.13.6
 
-RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
-	&& CONFIG="\
+ENV GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
+ENV	CONFIG="\
 		--prefix=/etc/nginx \
 		--sbin-path=/usr/sbin/nginx \
 		--modules-path=/usr/lib/nginx/modules \
@@ -33,8 +33,9 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 		--with-ld-opt=-L/usr/src/boringssl/.openssl/lib \
 		--add-dynamic-module=/usr/src/ngx_headers_more \
 		--add-dynamic-module=/usr/src/ngx_brotli \
-	" \
-	&& addgroup -S nginx \
+	"
+
+RUN addgroup nginx \
 	&& useradd --home /var/cache/nginx --shell /sbin/nologin --ingroup nginx nginx \
 	&& apk add --no-cache --virtual .build-deps \
 		autoconf \
@@ -66,12 +67,13 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 		tar \
 		tzdata \
 		zlib \
-		zlib-dev \
-	&& curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz \
-	&& curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
-    && ls -la \
-    && echo 'Hello' \
-	&& export GNUPGHOME="$(mktemp -d)" \
+		zlib-dev
+
+RUN wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -O nginx.tar.gz
+RUN wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -O nginx.tar.gz.asc
+RUN ls -la 
+RUN echo 'Hello' 
+RUN	export GNUPGHOME="$(mktemp -d)" \
 	&& found=''; \
 	for server in \
 		ha.pool.sks-keyservers.net \
