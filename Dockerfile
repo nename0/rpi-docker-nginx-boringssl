@@ -38,7 +38,7 @@ ENV	CONFIG="\
 #RUN ["/bin/bash", "-c", "ls -l /bin"]
 #RUN ["/bin/bash", "-c", "ln -snf /bin/sh /bin/bash"]
 RUN addgroup -S nginx
-RUN useradd -d /var/cache/nginx --shell /sbin/nologin -g nginx nginx
+RUN adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx
 RUN apk add --no-cache --virtual .build-deps \
 		autoconf \
 		automake \
