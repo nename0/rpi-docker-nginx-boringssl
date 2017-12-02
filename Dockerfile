@@ -36,7 +36,7 @@ ENV	CONFIG="\
 	"
 
 RUN addgroup nginx \
-	&& useradd --home /var/cache/nginx --shell /sbin/nologin --ingroup nginx nginx \
+	&& useradd -d /var/cache/nginx --shell /sbin/nologin -g nginx nginx \
 	&& apk add --no-cache --virtual .build-deps \
 		autoconf \
 		automake \
