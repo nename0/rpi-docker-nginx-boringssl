@@ -3,18 +3,9 @@
 # Pull base image
 FROM resin/armhf-alpine:latest
 
-RUN export NGINX=aaa
-RUN echo "Nginx version: ${NGINX}"
-
-ENV NGINX_2=bbb
-RUN echo "Nginx version: ${NGINX_2}"
-
-ARG NGINX_3=ccc
-RUN echo "Nginx version: ${NGINX_3}"
-
-RUN NGINX_VERSION=1.13.6 \
-    && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
-    && CONFIG="\
+ARG NGINX_VERSION=1.13.6
+ARG GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
+ARG CONFIG="\
 		--prefix=/etc/nginx \
 		--sbin-path=/usr/sbin/nginx \
 		--modules-path=/usr/lib/nginx/modules \
@@ -41,8 +32,8 @@ RUN NGINX_VERSION=1.13.6 \
 		--with-ld-opt=-L/usr/src/boringssl/.openssl/lib \
 		--add-dynamic-module=/usr/src/ngx_headers_more \
 		--add-dynamic-module=/usr/src/ngx_brotli \
-	"\
-	&& addgroup -S nginx \
+	"
+RUN addgroup -S nginx \
     && adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
     && apk add --no-cache --virtual .build-deps \
 		autoconf \
@@ -74,11 +65,12 @@ RUN NGINX_VERSION=1.13.6 \
 		tar \
 		tzdata \
 		zlib \
-		zlib-dev \
-    && echo "Nginx version: ${NGINX_VERSION}" \
-    && wget "https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz" -O nginx.tar.gz \
-    && wget "https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc"  -O nginx.tar.gz.asc \
-    && export GNUPGHOME="$(mktemp -d)" \
+		zlib-dev
+
+RUN echo "Nginx version: ${NGINX_VERSION}"
+RUN wget "https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz" -O nginx.tar.gz
+RUN wget "https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc"  -O nginx.tar.gz.asc
+RUN export GNUPGHOME="$(mktemp -d)" \
 	&& found=''; \
 	for server in \
 		ha.pool.sks-keyservers.net \
