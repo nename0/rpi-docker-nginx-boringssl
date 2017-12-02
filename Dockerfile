@@ -1,7 +1,7 @@
 #SOURCE https://github.com/nginx-modules/docker-nginx-boringss
 
 # Pull base image
-FROM arm32v6/alpine:latest
+FROM arm32v6/bash:latest
 
 ENV NGINX_VERSION 1.13.6
 
@@ -34,8 +34,9 @@ ENV	CONFIG="\
 		--add-dynamic-module=/usr/src/ngx_headers_more \
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	"
-RUN ["/bin/ash", "-c", "which sh"]
-RUN ["/bin/ash", "-c", "which ash"]
+RUN ["bash", "-c", "which sh"]
+RUN ["bash", "-c", "which bash"]
+RUN ["/bin/bash", "-c", "which sh"]
 RUN ["/bin/sh", "-c", "which ash"]
 RUN ["/bin/sh", "-c", "ls -l /bin"]
 #RUN ["/bin/bash", "-c", "ls -l /bin"]
