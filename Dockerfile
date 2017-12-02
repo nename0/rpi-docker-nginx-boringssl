@@ -3,10 +3,10 @@
 # Pull base image
 FROM resin/armhf-alpine:latest
 
-ENV NGINX_VERSION 1.13.6
+ARG NGINX_VERSION=1.13.6
 
-ENV GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
-ENV	CONFIG="\
+ARG GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
+ARG	CONFIG="\
 		--prefix=/etc/nginx \
 		--sbin-path=/usr/sbin/nginx \
 		--modules-path=/usr/lib/nginx/modules \
