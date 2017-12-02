@@ -37,6 +37,7 @@ ENV	CONFIG="\
 
 #RUN ["/bin/bash", "-c", "ls -l /bin"]
 #RUN ["/bin/bash", "-c", "ln -snf /bin/sh /bin/bash"]
+RUN echo 'Nginx version: $NGINX_VERSION'
 RUN addgroup -S nginx
 RUN adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx
 RUN apk add --no-cache --virtual .build-deps \
@@ -73,8 +74,6 @@ RUN apk add --no-cache --virtual .build-deps \
 
 RUN wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -O nginx.tar.gz
 RUN wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -O nginx.tar.gz.asc
-RUN ls -la 
-RUN echo 'Hello' 
 RUN	export GNUPGHOME="$(mktemp -d)" \
 	&& found=''; \
 	for server in \
