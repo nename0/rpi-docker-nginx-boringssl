@@ -35,7 +35,7 @@ ENV	CONFIG="\
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	"
 
-RUN ls l /bin
+RUN ls -l /bin
 RUN ln -snf /bin/bash /bin/sh
 RUN groupadd nginx
 RUN useradd -d /var/cache/nginx --shell /sbin/nologin -g nginx nginx
