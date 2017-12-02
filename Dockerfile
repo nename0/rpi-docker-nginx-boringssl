@@ -35,13 +35,8 @@ ENV	CONFIG="\
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	"
 
-RUN ["/usr/bin/env", "bash", "-c", "which sh"]
-RUN ["/usr/bin/env", "bash", "-c", "which bash"]
-RUN ["/bin/bash", "-c", "which sh"]
-RUN ["/bin/sh", "-c", "which ash"]
-RUN ["/bin/sh", "-c", "ls -l /bin"]
-#RUN ["/bin/bash", "-c", "ls -l /bin"]
-#RUN ["/bin/bash", "-c", "ln -snf /bin/sh /bin/bash"]
+RUN ["/bin/bash", "-c", "ls -l /bin"]
+RUN ["/bin/bash", "-c", "ln -snf /bin/sh /bin/bash"]
 RUN groupadd nginx
 RUN useradd -d /var/cache/nginx --shell /sbin/nologin -g nginx nginx
 RUN apk add --no-cache --virtual .build-deps \
