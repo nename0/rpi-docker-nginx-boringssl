@@ -35,7 +35,7 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	" \
 	&& addgroup -S nginx \
-	&& useradd -D -d /var/cache/nginx -s /sbin/nologin -G nginx nginx \
+	&& useradd --home /var/cache/nginx --shell /sbin/nologin --ingroup nginx nginx \
 	&& apk add --no-cache --virtual .build-deps \
 		autoconf \
 		automake \
@@ -69,6 +69,8 @@ RUN GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
 		zlib-dev \
 	&& curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -o nginx.tar.gz \
 	&& curl -fSL https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -o nginx.tar.gz.asc \
+    && ls -la \
+    && echo 'Hello' \
 	&& export GNUPGHOME="$(mktemp -d)" \
 	&& found=''; \
 	for server in \
