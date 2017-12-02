@@ -1,7 +1,7 @@
 #SOURCE https://github.com/nginx-modules/docker-nginx-boringss
 
 # Pull base image
-FROM resin/rpi-raspbian:latest
+FROM arm32v6/alpine:latest
 
 ENV NGINX_VERSION 1.13.6
 
@@ -35,10 +35,10 @@ ENV	CONFIG="\
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	"
 
-RUN ["/bin/bash", "-c", "ls -l /bin"]
-RUN ["/bin/bash", "-c", "ln -snf /bin/sh /bin/bash"]
-RUN groupadd nginx
-RUN useradd -d /var/cache/nginx --shell /sbin/nologin -g nginx nginx
+#RUN ["/bin/bash", "-c", "ls -l /bin"]
+#RUN ["/bin/bash", "-c", "ln -snf /bin/sh /bin/bash"]
+#RUN groupadd nginx
+#RUN useradd -d /var/cache/nginx --shell /sbin/nologin -g nginx nginx
 RUN apk add --no-cache --virtual .build-deps \
 		autoconf \
 		automake \
