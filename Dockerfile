@@ -87,11 +87,12 @@ RUN export GNUPGHOME="$(mktemp -d)" \
 	&& mkdir -p /usr/src
 
 RUN tar -zxC /usr/src -f nginx.tar.gz \
-	&& rm nginx.tar.gz \
-    && ls -l /usr/src/nginx-$NGINX_VERSION \
-	&& cd /usr/src/nginx-$NGINX_VERSION \
+	&& rm nginx.tar.gz
+
+COPY dynamic_tls_records.patch /usr/src/nginx-$NGINX_VERSION/
+
+RUN cd /usr/src/nginx-$NGINX_VERSION \
     && ls -l \
-	&& curl -fSL https://cdn.rawgit.com/nginx-modules/ngx_http_tls_dyn_size/0.1/nginx-dyntls-1.11.5.diff -o dynamic_tls_records.patch \
 	&& git apply -v dynamic_tls_records.patch
 
 #	&& (git clone --depth=1 https://github.com/nginx-modules/libbrotli /usr/src/libbrotli \
