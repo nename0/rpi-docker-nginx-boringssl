@@ -1,7 +1,7 @@
 #SOURCE https://github.com/nginx-modules/docker-nginx-boringss
 
 # Pull base image
-FROM resin/rpi-raspbian:stretch
+FROM arm32v6/alpine:latest
 
 ENV NGINX_VERSION 1.13.6
 
