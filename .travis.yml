@@ -1,0 +1,22 @@
+# SOURCE https://github.com/hypriot/rpi-mysql
+
+sudo: required
+services:
+- docker
+language: bash
+script:
+# prepare qemu
+- docker run --rm --privileged multiarch/qemu-user-static:register --reset
+# build image
+- docker build -t nename0/rpi-docker-nginx-bringssl .
+# test image
+- docker run nename0/rpi-docker-nginx-bringssl nginx -v
+# push image
+- >
+  if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
+    TAG=$(grep "ENV MYSQL_VERSION" Dockerfile | awk 'NF>1{print $NF}')
+    docker tag hypriot/rpi-mysql hypriot/rpi-mysql:$TAG
+    docker push hypriot/rpi-mysql:$TAG
+    docker push hypriot/rpi-mysql
+  fi
