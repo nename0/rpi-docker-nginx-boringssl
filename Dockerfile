@@ -3,7 +3,7 @@
 # Pull base image
 FROM resin/armhf-alpine:latest
 
-RUN NGINX_VERSION=1.13.6 \
+RUN /bin/bash -c NGINX_VERSION=1.13.6 \
     && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
     && CONFIG="\
 		--prefix=/etc/nginx \
