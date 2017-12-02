@@ -35,8 +35,9 @@ ENV	CONFIG="\
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	"
 
-RUN /bin/bash -c 'groupadd nginx'
-RUN /bin/bash -c 'useradd -d /var/cache/nginx --shell /sbin/nologin -g nginx nginx'
+RUN rm /bin/bash && ln -s /bin/sh /bin/bash
+RUN groupadd nginx
+RUN useradd -d /var/cache/nginx --shell /sbin/nologin -g nginx nginx
 RUN apk add --no-cache --virtual .build-deps \
 		autoconf \
 		automake \
