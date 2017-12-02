@@ -4,6 +4,7 @@
 FROM resin/armhf-alpine:latest
 
 ARG NGINX_VERSION=1.13.6
+RUN echo 'Nginx version: $NGINX_VERSION'
 
 ARG GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
 ARG	CONFIG="\
@@ -37,7 +38,6 @@ ARG	CONFIG="\
 
 #RUN ["/bin/bash", "-c", "ls -l /bin"]
 #RUN ["/bin/bash", "-c", "ln -snf /bin/sh /bin/bash"]
-RUN echo 'Nginx version: $NGINX_VERSION'
 RUN addgroup -S nginx
 RUN adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx
 RUN apk add --no-cache --virtual .build-deps \
