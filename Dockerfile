@@ -3,11 +3,9 @@
 # Pull base image
 FROM resin/armhf-alpine:latest
 
-ARG NGINX_VERSION=1.13.6
-RUN echo 'Nginx version: ${NGINX_VERSION}'
-
-ARG GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
-ARG	CONFIG="\
+RUN NGINX_VERSION=1.13.6 \
+    && GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8 \
+    && CONFIG="\
 		--prefix=/etc/nginx \
 		--sbin-path=/usr/sbin/nginx \
 		--modules-path=/usr/lib/nginx/modules \
@@ -34,13 +32,10 @@ ARG	CONFIG="\
 		--with-ld-opt=-L/usr/src/boringssl/.openssl/lib \
 		--add-dynamic-module=/usr/src/ngx_headers_more \
 		--add-dynamic-module=/usr/src/ngx_brotli \
-	"
-
-#RUN ["/bin/bash", "-c", "ls -l /bin"]
-#RUN ["/bin/bash", "-c", "ln -snf /bin/sh /bin/bash"]
-RUN addgroup -S nginx
-RUN adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx
-RUN apk add --no-cache --virtual .build-deps \
+	"\
+	&& addgroup -S nginx \
+    && adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
+    && apk add --no-cache --virtual .build-deps \
 		autoconf \
 		automake \
 		bind-tools \
@@ -70,11 +65,11 @@ RUN apk add --no-cache --virtual .build-deps \
 		tar \
 		tzdata \
 		zlib \
-		zlib-dev
-
-RUN wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -O nginx.tar.gz
-RUN wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -O nginx.tar.gz.asc
-RUN	export GNUPGHOME="$(mktemp -d)" \
+		zlib-dev \
+    && echo 'Nginx version: ${NGINX_VERSION}' \
+    && wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz -O nginx.tar.gz \
+    && wget https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz.asc  -O nginx.tar.gz.asc \
+    && export GNUPGHOME="$(mktemp -d)" \
 	&& found=''; \
 	for server in \
 		ha.pool.sks-keyservers.net \
