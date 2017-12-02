@@ -1,7 +1,7 @@
 #SOURCE https://github.com/nginx-modules/docker-nginx-boringss
 
 # Pull base image
-FROM arm32v6/bash:latest
+FROM resin/rpi-raspbian:latest
 
 ENV NGINX_VERSION 1.13.6
 
@@ -35,8 +35,6 @@ ENV	CONFIG="\
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	"
 
-RUN ["which", "bash"]
-RUN ["which", "sh"]
 RUN ["/usr/local/bin/bash", "-c", "which sh"]
 RUN ["/usr/local/bin/bash", "-c", "which bash"]
 RUN ["/usr/bin/env", "bash", "-c", "which sh"]
