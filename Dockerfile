@@ -34,8 +34,11 @@ ENV	CONFIG="\
 		--add-dynamic-module=/usr/src/ngx_headers_more \
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	"
-RUN ["bash", "-c", "which sh"]
-RUN ["bash", "-c", "which bash"]
+
+RUN ["/usr/local/bin/bash", "-c", "which sh"]
+RUN ["/usr/local/bin/bash", "-c", "which bash"]
+RUN ["/usr/bin/env", "bash", "-c", "which sh"]
+RUN ["/usr/bin/env", "bash", "-c", "which bash"]
 RUN ["/bin/bash", "-c", "which sh"]
 RUN ["/bin/sh", "-c", "which ash"]
 RUN ["/bin/sh", "-c", "ls -l /bin"]
