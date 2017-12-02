@@ -35,6 +35,9 @@ ENV	CONFIG="\
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	"
 
+RUN ["sh", "-c", "which sh"]
+RUN ["sh", "-c", "which bash"]
+RUN ["/bin/sh", "-c", "ls -l /bin"]
 RUN ["/bin/bash", "-c", "ls -l /bin"]
 RUN ["/bin/bash", "-c", "ln -snf /bin/sh /bin/bash"]
 RUN groupadd nginx
