@@ -68,8 +68,8 @@ RUN addgroup -S nginx \
 		zlib-dev
 
 RUN echo "Nginx version: ${NGINX_VERSION}"
-RUN wget "https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz" -O nginx.tar.gz
-RUN wget "https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc"  -O nginx.tar.gz.asc
+RUN curl -fSL "https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz" -o nginx.tar.gz
+RUN curl -fSL "https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc" -o nginx.tar.gz.asc
 RUN export GNUPGHOME="$(mktemp -d)" \
 	&& found=''; \
 	for server in \
