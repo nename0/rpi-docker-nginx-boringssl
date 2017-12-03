@@ -1,0 +1,67 @@
+diff --git a/src/event/ngx_event_openssl.c b/src/event/ngx_event_openssl.c
+index b2b7a5f..729088c 100644
+--- a/src/event/ngx_event_openssl.c
++++ b/src/event/ngx_event_openssl.c
+@@ -232,7 +232,7 @@ ngx_ssl_init(ngx_log_t *log)
+ ngx_int_t
+ ngx_ssl_create(ngx_ssl_t *ssl, ngx_uint_t protocols, void *data)
+ {
+-    ssl->ctx = SSL_CTX_new(SSLv23_method());
++    ssl->ctx = SSL_CTX_new(TLS_method());
+ 
+     if (ssl->ctx == NULL) {
+         ngx_ssl_error(NGX_LOG_EMERG, ssl->log, 0, "SSL_CTX_new() failed");
+@@ -250,6 +250,18 @@ ngx_ssl_create(ngx_ssl_t *ssl, ngx_uint_t protocols, void *data)
+                       "SSL_CTX_set_ex_data() failed");
+         return NGX_ERROR;
+     }
++	
++	if (SSL_CTX_set_min_proto_version(ssl->ctx, TLS1_2_VERSION) == 0) {
++        ngx_ssl_error(NGX_LOG_EMERG, ssl->log, 0,
++                      "SSL_CTX_set_min_proto_version(ssl->ctx, TLS1_2_VERSION) failed");
++        return NGX_ERROR;
++    }
++	
++	if (SSL_CTX_set_max_proto_version(ssl->ctx, TLS1_3_VERSION) == 0) {
++        ngx_ssl_error(NGX_LOG_EMERG, ssl->log, 0,
++                      "SSL_CTX_set_max_proto_version(ssl->ctx, TLS1_3_VERSION) failed");
++        return NGX_ERROR;
++    }
+ 
+     ssl->buffer_size = NGX_SSL_BUFSIZE;
+ 
+@@ -302,34 +314,6 @@ ngx_ssl_create(ngx_ssl_t *ssl, ngx_uint_t protocols, void *data)
+                           SSL_OP_NO_SSLv2|SSL_OP_NO_SSLv3|SSL_OP_NO_TLSv1);
+ #endif
+ 
+-    if (!(protocols & NGX_SSL_SSLv2)) {
+-        SSL_CTX_set_options(ssl->ctx, SSL_OP_NO_SSLv2);
+-    }
+-    if (!(protocols & NGX_SSL_SSLv3)) {
+-        SSL_CTX_set_options(ssl->ctx, SSL_OP_NO_SSLv3);
+-    }
+-    if (!(protocols & NGX_SSL_TLSv1)) {
+-        SSL_CTX_set_options(ssl->ctx, SSL_OP_NO_TLSv1);
+-    }
+-#ifdef SSL_OP_NO_TLSv1_1
+-    SSL_CTX_clear_options(ssl->ctx, SSL_OP_NO_TLSv1_1);
+-    if (!(protocols & NGX_SSL_TLSv1_1)) {
+-        SSL_CTX_set_options(ssl->ctx, SSL_OP_NO_TLSv1_1);
+-    }
+-#endif
+-#ifdef SSL_OP_NO_TLSv1_2
+-    SSL_CTX_clear_options(ssl->ctx, SSL_OP_NO_TLSv1_2);
+-    if (!(protocols & NGX_SSL_TLSv1_2)) {
+-        SSL_CTX_set_options(ssl->ctx, SSL_OP_NO_TLSv1_2);
+-    }
+-#endif
+-#ifdef SSL_OP_NO_TLSv1_3
+-    SSL_CTX_clear_options(ssl->ctx, SSL_OP_NO_TLSv1_3);
+-    if (!(protocols & NGX_SSL_TLSv1_3)) {
+-        SSL_CTX_set_options(ssl->ctx, SSL_OP_NO_TLSv1_3);
+-    }
+-#endif
+-
+ #ifdef SSL_OP_NO_COMPRESSION
+     SSL_CTX_set_options(ssl->ctx, SSL_OP_NO_COMPRESSION);
+ #endif

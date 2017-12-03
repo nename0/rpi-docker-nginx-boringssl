@@ -1,7 +1,7 @@
-#SOURCE https://github.com/nginx-modules/docker-nginx-boringss
+#SOURCE https://github.com/nginx-modules/docker-nginx-boringssl
 
 # Pull base image
-FROM resin/armhf-alpine:latest
+FROM resin/armhf-alpine:latest as builder
 
 ARG NGINX_VERSION=1.13.6
 ARG GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
@@ -89,11 +89,12 @@ RUN export GNUPGHOME="$(mktemp -d)" \
 RUN tar -zxC /usr/src -f nginx.tar.gz \
 	&& rm nginx.tar.gz
 
-COPY dynamic_tls_records.patch /usr/src/nginx-$NGINX_VERSION/
+COPY enable_tls13.patch /usr/src/nginx-$NGINX_VERSION/
 
 RUN cd /usr/src/nginx-$NGINX_VERSION \
-    && ls -l \
-	&& git apply -v dynamic_tls_records.patch
+    && curl -fSL "https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.13.0%2B.patch" -o dynamic_tls_records.patch \
+	&& git apply -v dynamic_tls_records.patch \
+	&& git apply -v enable_tls13.patch
 
 #	&& (git clone --depth=1 https://github.com/nginx-modules/libbrotli /usr/src/libbrotli \
 #		&& cd /usr/src/libbrotli \
@@ -116,9 +117,6 @@ RUN git clone --depth=1 --recurse-submodules https://github.com/google/ngx_brotl
 
 
 RUN cd /usr/src/nginx-$NGINX_VERSION \
-    && ./configure $CONFIG --with-debug \
-	&& make -j$(getconf _NPROCESSORS_ONLN) \
-	&& mv objs/nginx objs/nginx-debug \
 	&& ./configure $CONFIG \
 	&& make -j$(getconf _NPROCESSORS_ONLN) \
 	&& make install \
@@ -147,7 +145,7 @@ RUN cd /usr/src/nginx-$NGINX_VERSION \
 			| sort -u \
 			| xargs -r apk info --installed \
 			| sort -u \
-	) tini tzdata ca-certificates" \
+	) tini tzdata ca-certificates musl pcre zlib" \
 	&& apk add --no-cache --virtual .nginx-rundeps $runDeps \
 	&& apk del .build-deps \
 	&& apk del .gettext \
@@ -157,10 +155,16 @@ RUN cd /usr/src/nginx-$NGINX_VERSION \
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
+FROM resin/armhf-alpine:latest
+
+RUN apk add --no-cache --virtual .nginx-rundeps tini tzdata ca-certificates musl pcre zlib
+
+COPY --from=builder /etc/nginx /etc
+COPY --from=builder /usr/sbin/nginx /usr/sbin/
+COPY --from=builder /usr/lib/nginx /usr/lib/
 
 LABEL description="nginx built from source" \
-      openssl="BoringSSL" \
-      nginx="nginx $NGINX_VERSION"
+      openssl="BoringSSL"
 
 EXPOSE 80 443
 
