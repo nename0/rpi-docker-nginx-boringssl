@@ -1,8 +1,12 @@
 # SOURCE https://github.com/hypriot/rpi-mysql
 
 sudo: required
-services:
-- docker
+#services:
+#- docker
+addons:
+  apt:
+    packages:
+      - docker-ce
 language: bash
 script:
 # prepare qemu
