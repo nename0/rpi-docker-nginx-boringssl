@@ -159,9 +159,9 @@ FROM resin/armhf-alpine:latest
 
 RUN apk add --no-cache --virtual .nginx-rundeps tini tzdata ca-certificates musl pcre zlib
 
-COPY --from=builder /etc/nginx /etc
+COPY --from=builder /etc/nginx /etc/nginx
 COPY --from=builder /usr/sbin/nginx /usr/sbin/
-COPY --from=builder /usr/lib/nginx /usr/lib/
+COPY --from=builder /usr/lib/nginx /usr/lib/nginx
 
 LABEL description="nginx built from source" \
       openssl="BoringSSL"
