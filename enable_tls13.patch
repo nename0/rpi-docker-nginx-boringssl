@@ -15,13 +15,13 @@ index b2b7a5f..729088c 100644
                        "SSL_CTX_set_ex_data() failed");
          return NGX_ERROR;
      }
-+	
++
 +	if (SSL_CTX_set_min_proto_version(ssl->ctx, TLS1_2_VERSION) == 0) {
 +        ngx_ssl_error(NGX_LOG_EMERG, ssl->log, 0,
 +                      "SSL_CTX_set_min_proto_version(ssl->ctx, TLS1_2_VERSION) failed");
 +        return NGX_ERROR;
 +    }
-+	
++
 +	if (SSL_CTX_set_max_proto_version(ssl->ctx, TLS1_3_VERSION) == 0) {
 +        ngx_ssl_error(NGX_LOG_EMERG, ssl->log, 0,
 +                      "SSL_CTX_set_max_proto_version(ssl->ctx, TLS1_3_VERSION) failed");
