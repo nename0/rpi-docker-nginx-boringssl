@@ -12,15 +12,15 @@ script:
 # prepare qemu
 - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 # build image
-- docker build -t nename0/rpi-docker-nginx-bringssl .
+- docker build -t nename0/rpi-docker-nginx-boringssl .
 # test image
-- docker run nename0/rpi-docker-nginx-bringssl nginx -v
+- docker run nename0/rpi-docker-nginx-boringssl nginx -v
 # push image
 - >
   if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     docker login -u="$DOCKER_USER" -p="$DOCKER_PASS"
     TAG=$(grep "ARG NGINX_VERSION=" Dockerfile | cut -d\= -f2)
-    docker tag nename0/rpi-docker-nginx-bringssl nename0/rpi-docker-nginx-bringssl:$TAG
-    docker push nename0/rpi-docker-nginx-bringssl:$TAG
-    docker push nename0/rpi-docker-nginx-bringssl
+    docker tag nename0/rpi-docker-nginx-boringssl nename0/rpi-docker-nginx-boringssl:$TAG
+    docker push nename0/rpi-docker-nginx-boringssl:$TAG
+    docker push nename0/rpi-docker-nginx-boringssl
   fi
