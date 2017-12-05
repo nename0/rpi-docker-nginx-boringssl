@@ -33,6 +33,9 @@ ARG CONFIG="\
 		--add-dynamic-module=/usr/src/ngx_headers_more \
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	"
+
+RUN [ "cross-build-start" ]
+
 RUN apk add --no-cache --virtual .build-deps \
 		autoconf \
 		automake \
@@ -130,7 +133,11 @@ RUN cd /usr/src/nginx-$NGINX_VERSION \
 	&& rm -rf /usr/src/boringssl /usr/src/libbrotli /usr/src/ngx_* \
 	&& apk del .build-deps
 
+RUN [ "cross-build-end" ]
+
 FROM resin/armhf-alpine:latest
+
+RUN [ "cross-build-start" ]
 
 RUN addgroup -S nginx \
     && adduser -D -S -h /var/cache/nginx -s /sbin/nologin -G nginx nginx \
@@ -140,6 +147,8 @@ RUN addgroup -S nginx \
 	&& mkdir -p /var/log/nginx \
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
+
+RUN [ "cross-build-end" ]
 
 
 COPY --from=builder /etc/nginx /etc/nginx
