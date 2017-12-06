@@ -117,7 +117,7 @@ RUN git clone --depth=1 --recurse-submodules https://github.com/google/ngx_brotl
 
 RUN git clone --depth=1 https://github.com/openssl/openssl.git /usr/src/openssl \
 	&& cd /usr/src/openssl \
-	&& ./configure enable-tls1_3
+	&& ./config enable-tls1_3
 
 
 RUN cd /usr/src/nginx-$NGINX_VERSION \
