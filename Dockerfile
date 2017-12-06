@@ -29,6 +29,7 @@ ARG CONFIG="\
 		--with-http_v2_module \
 		--with-ipv6 \	
 		--with-openssl=/usr/src/openssl \
+		--with-openssl-opt=enable-tls1_3 \
 		--add-dynamic-module=/usr/src/ngx_headers_more \
 		--add-dynamic-module=/usr/src/ngx_brotli \
 	"
@@ -115,9 +116,9 @@ RUN git clone --depth=1 --recurse-submodules https://github.com/google/ngx_brotl
 #		&& make -C/usr/src/boringssl/build -j$(getconf _NPROCESSORS_ONLN) \
 #		&& cp /usr/src/boringssl/build/crypto/libcrypto.a /usr/src/boringssl/build/ssl/libssl.a /usr/src/boringssl/.openssl/lib)
 
-RUN git clone --depth=1 https://github.com/openssl/openssl.git /usr/src/openssl \
-	&& cd /usr/src/openssl \
-	&& ./config enable-tls1_3
+RUN git clone --depth=1 https://github.com/openssl/openssl.git /usr/src/openssl
+	
+	
 
 
 RUN cd /usr/src/nginx-$NGINX_VERSION \
