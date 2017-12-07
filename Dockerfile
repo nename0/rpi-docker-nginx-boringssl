@@ -27,7 +27,7 @@ ARG CONFIG="\
 		--with-compat \
 		--with-file-aio \
 		--with-http_v2_module \
-		--with-ipv6 \	
+		--with-ipv6 \
 		--with-openssl=/usr/src/openssl \
 		--with-openssl-opt=enable-tls1_3 \
 		--add-dynamic-module=/usr/src/ngx_headers_more \
@@ -36,7 +36,7 @@ ARG CONFIG="\
 
 RUN [ "cross-build-start" ]
 
-RUN apk add --no-cache --virtual .build-deps \
+RUN apt-get update && apt-get install \
 		autoconf \
 		automake \
 		bind-tools \
@@ -134,8 +134,8 @@ RUN cd /usr/src/nginx-$NGINX_VERSION \
 	&& strip /usr/sbin/nginx* \
 	&& strip /usr/lib/nginx/modules/*.so \
 	&& rm -rf /usr/src/nginx-$NGINX_VERSION \
-	&& rm -rf /usr/src/boringssl /usr/src/libbrotli /usr/src/ngx_* \
-	&& apk del .build-deps
+	&& rm -rf /usr/src/boringssl /usr/src/libbrotli /usr/src/ngx_*
+	
 
 RUN [ "cross-build-end" ]
 

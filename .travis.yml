@@ -11,8 +11,10 @@ language: bash
 script:
 # build image
 - docker build -t nename0/rpi-docker-nginx-boringssl .
+# prepare qemu
+- docker run --rm --privileged multiarch/qemu-user-static:register --reset
 # test image
-- docker run nename0/rpi-docker-nginx-boringssl nginx -v
+- docker run nename0/rpi-docker-nginx-boringssl nginx -V
 # push image
 - >
   if [ "$TRAVIS_BRANCH" == "master" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
