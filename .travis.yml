@@ -11,6 +11,8 @@ language: bash
 script:
 # build image
 - docker build -t nename0/rpi-docker-nginx-boringssl .
+# prepare qemu
+- docker run --rm --privileged multiarch/qemu-user-static:register --reset
 # test image
 - docker run nename0/rpi-docker-nginx-boringssl nginx -v
 # push image
@@ -22,3 +24,7 @@ script:
     docker push nename0/rpi-docker-nginx-boringssl:$TAG
     docker push nename0/rpi-docker-nginx-boringssl
   fi
+
+branches:
+  only:
+  - master
