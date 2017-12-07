@@ -39,34 +39,27 @@ RUN [ "cross-build-start" ]
 RUN apt-get update && apt-get install \
 		autoconf \
 		automake \
-		bind-tools \
 		binutils \
-		build-base \
+		build-essential \
 		ca-certificates \
 		cmake \
 		curl \
 		gcc \
-		gd-dev \
-		geoip-dev \
 		git \
 		gnupg \
-		gnupg \
-		go \
+		golang-go \
+		libbz2-dev \
 		libc-dev \
-		libgcc \
+		libperl-dev \
+		libpcre3 \
+		libpcre3-dev \
 		libstdc++ \
 		libtool \
 		libxslt-dev \
-		linux-headers \
 		make \
-		pcre \
-		pcre-dev \
-		perl-dev \
-		su-exec \
 		tar \
 		tzdata \
-		zlib \
-		zlib-dev
+		unzip
 
 RUN echo "Nginx version: ${NGINX_VERSION}"
 RUN curl -fSL "https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz" -o nginx.tar.gz
