@@ -1,7 +1,7 @@
 #SOURCE https://github.com/nginx-modules/docker-nginx-boringssl
 
 # Pull base image
-FROM resin/armhf-alpine:latest as builder
+FROM resin/armv7hf-debian:latest as builder
 
 ARG NGINX_VERSION=1.13.6
 ARG GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
