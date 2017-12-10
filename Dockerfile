@@ -1,6 +1,6 @@
 #SOURCE https://github.com/nginx-modules/docker-nginx-boringssl
 
-FROM nename0/nename0/rpi-docker-boringssl:latest as boringssl-build
+FROM nename0/rpi-docker-boringssl:latest as boringssl-build
 
 # Pull base image
 FROM resin/armhf-alpine:latest as builder
