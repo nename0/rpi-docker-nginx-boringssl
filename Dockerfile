@@ -1,9 +1,11 @@
 #SOURCE https://github.com/nginx-modules/docker-nginx-boringssl
 
+FROM nename0/nename0/rpi-docker-boringssl:latest as boringssl-build
+
 # Pull base image
 FROM resin/armhf-alpine:latest as builder
 
-ARG NGINX_VERSION=1.13.6
+ARG NGINX_VERSION=1.13.7
 ARG GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
 ARG CONFIG="\
 		--prefix=/etc/nginx \
@@ -28,8 +30,8 @@ ARG CONFIG="\
 		--with-file-aio \
 		--with-http_v2_module \
 		--with-ipv6 \
-		--with-cc-opt=-I/usr/src/boringssl/.openssl/include \
-		--with-ld-opt=-L/usr/src/boringssl/.openssl/lib \
+		--with-cc-opt=-I/usr/lib/boringssl/include \
+		--with-ld-opt=-L/usr/lib/boringssl/lib \
 		--add-dynamic-module=/usr/src/ngx_headers_more \
 		--add-dynamic-module=/usr/src/ngx_brotli \
 		--add-dynamic-module=/usr/src/ngx_ct \
@@ -103,20 +105,9 @@ RUN cd /usr/src/nginx-$NGINX_VERSION \
 #		&& ./autogen.sh && ./configure && make -j$(getconf _NPROCESSORS_ONLN) && make install) \
 RUN git clone --depth=1 --recurse-submodules https://github.com/google/ngx_brotli /usr/src/ngx_brotli \
 	&& git clone --depth=1 https://github.com/openresty/headers-more-nginx-module /usr/src/ngx_headers_more \
-	&& git clone --depth=1 https://github.com/nename0/nginx-ct /usr/src/ngx_ct \
-	&& (git clone --depth=1 https://boringssl.googlesource.com/boringssl /usr/src/boringssl \
-#		&& sed -i 's@out \([>=]\) TLS1_2_VERSION@out \1 TLS1_3_VERSION@' /usr/src/boringssl/ssl/ssl_lib.cc \
-#		&& sed -i 's@ssl->version[ ]*=[ ]*TLS1_2_VERSION@ssl->version = TLS1_3_VERSION@' /usr/src/boringssl/ssl/s3_lib.cc \
-#		&& sed -i 's@(SSL3_VERSION, TLS1_2_VERSION@(SSL3_VERSION, TLS1_3_VERSION@' /usr/src/boringssl/ssl/ssl_test.cc \
-#		&& sed -i 's@\$shaext[ ]*=[ ]*0;@\$shaext = 1;@' /usr/src/boringssl/crypto/*/asm/*.pl \
-#		&& sed -i 's@\$avx[ ]*=[ ]*[0|1];@\$avx = 2;@' /usr/src/boringssl/crypto/*/asm/*.pl \
-#		&& sed -i 's@\$addx[ ]*=[ ]*0;@\$addx = 1;@' /usr/src/boringssl/crypto/*/asm/*.pl \
-		&& mkdir -p /usr/src/boringssl/build /usr/src/boringssl/.openssl/lib /usr/src/boringssl/.openssl/include \
-		&& ln -sf /usr/src/boringssl/include/openssl /usr/src/boringssl/.openssl/include/openssl \
-		&& touch /usr/src/boringssl/.openssl/include/openssl/ssl.h \
-		&& cmake -B/usr/src/boringssl/build -H/usr/src/boringssl \
-		&& make -C/usr/src/boringssl/build -j$(getconf _NPROCESSORS_ONLN) \
-		&& cp /usr/src/boringssl/build/crypto/libcrypto.a /usr/src/boringssl/build/ssl/libssl.a /usr/src/boringssl/.openssl/lib)
+	&& git clone --depth=1 https://github.com/nename0/nginx-ct /usr/src/ngx_ct
+
+COPY --from=boringssl-build /usr/lib/boringssl /usr/lib/boringssl
 
 
 RUN cd /usr/src/nginx-$NGINX_VERSION \
