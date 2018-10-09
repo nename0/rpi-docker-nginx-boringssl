@@ -5,7 +5,7 @@ FROM nename0/rpi-docker-boringssl:latest as boringssl-build
 # Pull base image
 FROM resin/armhf-alpine:latest as builder
 
-ARG NGINX_VERSION=1.13.7
+ARG NGINX_VERSION=1.15.5
 ARG GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
 ARG CONFIG="\
 		--prefix=/etc/nginx \
@@ -50,7 +50,6 @@ RUN apk add --no-cache --virtual .build-deps \
 		curl \
 		gcc \
 		gd-dev \
-		geoip-dev \
 		git \
 		gnupg \
 		gnupg \
@@ -93,12 +92,9 @@ RUN export GNUPGHOME="$(mktemp -d)" \
 RUN tar -zxC /usr/src -f nginx.tar.gz \
 	&& rm nginx.tar.gz
 
-COPY enable_tls13.patch /usr/src/nginx-$NGINX_VERSION/
-
 RUN cd /usr/src/nginx-$NGINX_VERSION \
-    && curl -fSL "https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.13.0%2B.patch" -o dynamic_tls_records.patch \
-	&& git apply -v dynamic_tls_records.patch \
-	&& git apply -v enable_tls13.patch
+    && curl -fSL "https://cdn.rawgit.com/nginx-modules/ngx_http_tls_dyn_size/5e3b560d/nginx__dynamic_tls_records_1.15.3%2B.patch" -o dynamic_tls_records.patch \
+	&& git apply -v dynamic_tls_records.patch
 
 #	&& (git clone --depth=1 https://github.com/nginx-modules/libbrotli /usr/src/libbrotli \
 #		&& cd /usr/src/libbrotli \
