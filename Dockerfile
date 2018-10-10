@@ -93,13 +93,10 @@ RUN tar -zxC /usr/src -f nginx.tar.gz \
 	&& rm nginx.tar.gz
 
 RUN cd /usr/src/nginx-$NGINX_VERSION \
-    && curl -fSL "https://cdn.rawgit.com/nginx-modules/ngx_http_tls_dyn_size/master/nginx__dynamic_tls_records_1.15.5%2B.patch" -o dynamic_tls_records.patch \
+    && curl -fSL "https://cdn.rawgit.com/nginx-modules/ngx_http_tls_dyn_size/0.4/nginx__dynamic_tls_records_1.15.5%2B.patch" -o dynamic_tls_records.patch \
 	&& patch -p1 < dynamic_tls_records.patch
 
-#	&& (git clone --depth=1 https://github.com/nginx-modules/libbrotli /usr/src/libbrotli \
-#		&& cd /usr/src/libbrotli \
-#		&& ./autogen.sh && ./configure && make -j$(getconf _NPROCESSORS_ONLN) && make install) \
-RUN git clone --depth=1 --recurse-submodules https://github.com/google/ngx_brotli /usr/src/ngx_brotli \
+RUN git clone --depth=1 --recurse-submodules https://github.com/eustas/ngx_brotli /usr/src/ngx_brotli \
 	&& git clone --depth=1 https://github.com/openresty/headers-more-nginx-module /usr/src/ngx_headers_more \
 	&& git clone --depth=1 https://github.com/nename0/nginx-ct /usr/src/ngx_ct
 
@@ -119,7 +116,7 @@ RUN cd /usr/src/nginx-$NGINX_VERSION \
 	&& strip /usr/sbin/nginx* \
 	&& strip /usr/lib/nginx/modules/*.so \
 	&& rm -rf /usr/src/nginx-$NGINX_VERSION \
-	&& rm -rf /usr/src/boringssl /usr/src/libbrotli /usr/src/ngx_* \
+	&& rm -rf /usr/src/boringssl /usr/src/ngx_* \
 	&& apk del .build-deps
 
 RUN [ "cross-build-end" ]
