@@ -3,7 +3,7 @@
 FROM nename0/rpi-docker-boringssl:latest as boringssl-build
 
 # Pull base image
-FROM resin/armhf-alpine:latest as builder
+FROM balenalib/armv7hf-alpine:latest as builder
 
 ARG NGINX_VERSION=1.16.0
 ARG GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
@@ -124,7 +124,7 @@ RUN cd /usr/src/nginx-$NGINX_VERSION \
 
 RUN [ "cross-build-end" ]
 
-FROM resin/armhf-alpine:latest
+FROM balenalib/armv7hf-alpine:latest
 
 RUN [ "cross-build-start" ]
 
