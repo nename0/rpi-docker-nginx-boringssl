@@ -5,7 +5,7 @@ FROM nename0/rpi-docker-boringssl:latest as boringssl-build
 # Pull base image
 FROM balenalib/armv7hf-alpine:latest as builder
 
-ARG NGINX_VERSION=1.16.1
+ARG NGINX_VERSION=1.18.0
 ARG GPG_KEYS=B0F4253373F8F6F510D42178520A9993A1C052F8
 ARG CONFIG="\
 		--prefix=/etc/nginx \
