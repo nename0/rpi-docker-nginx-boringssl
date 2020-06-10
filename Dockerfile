@@ -93,7 +93,7 @@ RUN tar -zxC /usr/src -f nginx.tar.gz \
 	&& rm nginx.tar.gz
 
 RUN cd /usr/src/nginx-$NGINX_VERSION \
-    && curl -fSL "https://cdn.rawgit.com/nginx-modules/ngx_http_tls_dyn_size/master/nginx__dynamic_tls_records_1.15.5%2B.patch" -o dynamic_tls_records.patch \
+    && curl -fSL "https://raw.githubusercontent.com/nginx-modules/ngx_http_tls_dyn_size/0.5/nginx__dynamic_tls_records_1.17.7%2B.patch" -o dynamic_tls_records.patch \
 	&& patch -p1 < dynamic_tls_records.patch
 
 #	&& (git clone --depth=1 https://github.com/nginx-modules/libbrotli /usr/src/libbrotli \
